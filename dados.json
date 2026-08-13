@@ -1,0 +1,109 @@
+{
+  "movimentacoes": [
+    {
+      "id": 1,
+      "desc": "Salário Mensal",
+      "valor": 5500,
+      "tipo": "receita",
+      "cat": "Renda",
+      "mes": "2026-08"
+    },
+    {
+      "id": 2,
+      "desc": "Aluguel",
+      "valor": 1800,
+      "tipo": "despesa",
+      "cat": "Moradia",
+      "mes": "2026-08"
+    },
+    {
+      "id": 3,
+      "desc": "Supermercado",
+      "valor": 450,
+      "tipo": "despesa",
+      "cat": "Alimentação",
+      "mes": "2026-08"
+    },
+    {
+      "id": 4,
+      "desc": "Uber",
+      "valor": 120,
+      "tipo": "despesa",
+      "cat": "Transporte",
+      "mes": "2026-08"
+    },
+    {
+      "id": 5,
+      "desc": "Cinema",
+      "valor": 80,
+      "tipo": "despesa",
+      "cat": "Lazer",
+      "mes": "2026-07"
+    }
+  ],
+  "contas": [
+    {
+      "id": 1,
+      "nome": "Nubank",
+      "saldo": 3200
+    },
+    {
+      "id": 2,
+      "nome": "Itaú",
+      "saldo": 1500
+    }
+  ],
+  "faturas": [
+    {
+      "id": 1,
+      "desc": "Cartão Nubank",
+      "valor": 850.4,
+      "vencimento": "2026-08-20",
+      "status": "pendente"
+    },
+    {
+      "id": 2,
+      "desc": "Internet",
+      "valor": 120.0,
+      "vencimento": "2026-08-15",
+      "status": "pendente"
+    },
+    {
+      "id": 3,
+      "desc": "Cartão C&A",
+      "valor": 215.0,
+      "vencimento": "2026-08-25",
+      "status": "pendente"
+    }
+  ],
+  "metas": [
+    {
+      "id": 1,
+      "nome": "Reserva de Emergência",
+      "alvo": 10000,
+      "guardado": 4500
+    },
+    {
+      "id": 2,
+      "nome": "Novo iPhone",
+      "alvo": 7000,
+      "guardado": 1200
+    }
+  ],
+  "projetos": [
+    {
+      "id": 1,
+      "nome": "Viagem Itália 2027",
+      "alvo": 15000,
+      "guardado": 3000,
+      "tipo": "viagem"
+    },
+    {
+      "id": 2,
+      "nome": "Reserva Financeira",
+      "alvo": 5000,
+      "guardado": 1500,
+      "tipo": "reserva"
+    }
+  ]
+}
