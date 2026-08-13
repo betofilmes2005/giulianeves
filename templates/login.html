@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e9d96">
+    <title>Agenda Financeira — Giulia Neves</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-card">
+        <div class="login-logo">💙</div>
+        <h1>Agenda Financeira</h1>
+        <p class="login-sub">Sistema de Giulia Neves</p>
+
+        {% if erro %}
+        <div class="alert alert-erro">{{ erro }}</div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" name="usuario" placeholder="Digite seu usuário" required>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="senha" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+
+        <p class="login-footer">Desenvolvido por Giulia Neves</p>
+    </div>
+</body>
+</html>

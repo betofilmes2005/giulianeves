@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e9d96">
+    <title>Dashboard — Agenda Financeira</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-container">
+    <!-- Sidebar fixa à esquerda com ícones -->
+    <aside class="sidebar">
+        <h2>GiuliaNeves</h2>
+        <ul class="sidebar-nav">
+            <li class="active" data-tab="dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </li>
+            <li data-tab="contas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Contas
+            </li>
+            <li data-tab="gastos">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                Gastos
+            </li>
+            <li data-tab="faturas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                Faturas
+            </li>
+            <li data-tab="metas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                Metas
+            </li>
+            <li data-tab="projetos">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                Projetos
+            </li>
+            <li data-tab="viagens">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Viagens
+            </li>
+        </ul>
+        <div class="sidebar-rodape">
+            <button class="btn btn-pdf" onclick="imprimirPDF()">🖨️ PDF</button>
+            <a href="/logout" class="btn btn-ghost">Sair</a>
+        </div>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+        <!-- Dashboard -->
+        <section id="tab-dashboard" class="tab-panel">
+            <div class="header-section">
+                <h1>Olá, Giulia</h1>
+                <p>"Seu dinheiro, com intenção."</p>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="card kpi-card"><h3>Gastos no Mês</h3><p id="kpi-gastos">R$ 0,00</p></div>
+                <div class="card kpi-card"><h3>Faturas Pendentes</h3><p id="kpi-faturas" class="coral">R$ 0,00</p></div>
+                <div class="card kpi-card"><h3>Total Guardado</h3><p id="kpi-guardado" class="dourado">R$ 0,00</p></div>
+                <div class="card kpi-card"><h3>Saldo Geral</h3><p id="kpi-saldo">R$ 0,00</p></div>
+            </div>
+
+            <div class="dual">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Gastos por categoria</h2>
+                        <select id="filtro-mes" onchange="renderizar()">
+                            <option value="todos">Todos os meses</option>
+                        </select>
+                    </div>
+                    <div id="donut-chart" class="donut-container"></div>
+                    <div id="donut-legend" class="donut-legend"></div>
+                </div>
+                <div class="card">
+                    <h2>Lembretes para guardar</h2>
+                    <div id="dash-metas"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Próximos vencimentos</div>
+            <div class="card" id="dash-vencimentos"></div>
+        </section>
+
+        <!-- Contas -->
+        <section id="tab-contas" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Minhas Contas</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('conta')">➕ Adicionar</button>
+                </div>
+                <div id="lista-contas" class="kpi-grid"></div>
+            </div>
+        </section>
+
+        <!-- Gastos -->
+        <section id="tab-gastos" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Movimentações</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('gasto')">➕ Adicionar</button>
+                </div>
+                <p class="dica">Clique em um item para selecionar (para Alterar/Excluir).</p>
+                <div id="lista-gastos"></div>
+            </div>
+        </section>
+
+        <!-- Faturas -->
+        <section id="tab-faturas" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Gestão de Faturas</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('fatura')">➕ Adicionar</button>
+                </div>
+                <p class="dica">Clique no badge para marcar como pago/pendente.</p>
+                <div id="lista-faturas"></div>
+            </div>
+        </section>
+
+        <!-- Metas -->
+        <section id="tab-metas" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Metas de Economia</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('meta')">➕ Adicionar</button>
+                </div>
+                <div id="lista-metas" class="kpi-grid"></div>
+            </div>
+        </section>
+
+        <!-- Projetos -->
+        <section id="tab-projetos" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Projetos Futuros</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('projeto')">➕ Adicionar</button>
+                </div>
+                <div id="lista-projetos" class="kpi-grid"></div>
+            </div>
+        </section>
+
+        <!-- Viagens -->
+        <section id="tab-viagens" class="tab-panel hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Planejamento de Viagens</h2>
+                    <button class="btn btn-primary" onclick="abrirForm('viagem')">➕ Adicionar</button>
+                </div>
+                <div id="lista-viagens" class="kpi-grid"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Barra de ações (fixa) -->
+<div class="acoes-fixas">
+    <button class="btn btn-primary" onclick="abrirForm('gasto')">➕ Adicionar</button>
+    <button class="btn btn-edit" onclick="alterarSelecionado()">✏️ Alterar</button>
+    <button class="btn btn-danger" onclick="excluirSelecionado()">🗑️ Excluir</button>
+    <button class="btn btn-save" onclick="salvarDados()">💾 Salvar</button>
+    <button class="btn btn-backup" onclick="fazerBackup()">📦 Backup</button>
+</div>
+
+<!-- Modal de formulário -->
+<div class="modal" id="modal-form">
+    <div class="modal-content">
+        <h3 id="form-titulo">Novo Lançamento</h3>
+        <input type="hidden" id="item-id">
+        <input type="hidden" id="item-tipo">
+        <div class="form-group">
+            <label>Descrição / Nome</label>
+            <input type="text" id="f-desc" placeholder="Ex: Supermercado">
+        </div>
+        <div class="form-group" id="group-valor">
+            <label>Valor (R$)</label>
+            <input type="text" id="f-valor" placeholder="R$ 0,00" inputmode="decimal">
+        </div>
+        <div class="form-group" id="group-tipo">
+            <label>Tipo</label>
+            <select id="f-tipo">
+                <option value="despesa">Despesa</option>
+                <option value="receita">Receita</option>
+            </select>
+        </div>
+        <div class="form-group" id="group-cat">
+            <label>Categoria</label>
+            <select id="f-cat">
+                <option value="Moradia">Moradia</option>
+                <option value="Alimentação">Alimentação</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Compras">Compras</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+        <div class="form-group" id="group-mes">
+            <label>Mês (ano-mês)</label>
+            <input type="month" id="f-mes">
+        </div>
+        <div class="form-group" id="group-alvo">
+            <label>Quer guardar quanto? (R$)</label>
+            <input type="text" id="f-alvo" placeholder="R$ 0,00" inputmode="decimal">
+        </div>
+        <div class="form-group" id="group-guardado">
+            <label>Já guardado (R$)</label>
+            <input type="text" id="f-guardado" placeholder="R$ 0,00" inputmode="decimal">
+        </div>
+        <div class="form-group" id="group-venc">
+            <label>Vencimento</label>
+            <input type="date" id="f-venc">
+        </div>
+        <div class="form-acoes">
+            <button class="btn btn-primary" onclick="salvarItem()">Salvar</button>
+            <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
